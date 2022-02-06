@@ -1,5 +1,5 @@
-import 'package:contact_ui/components/stories.dart';
-import 'package:contact_ui/constant/const_list.dart';
+import 'stories.dart';
+import '../constant/const_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

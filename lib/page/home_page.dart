@@ -1,5 +1,6 @@
 
-import 'package:contact_ui/components/body.dart';
+import '../components/body.dart';
+import '../constant/const_list.dart';
 import 'package:flutter/material.dart';
 
 
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         BottomNavigationBarItem(icon: Icon(Icons.call), label: '')
       ],
       onTap: _changeIndex,
-      backgroundColor: Colors.white,
+      backgroundColor:white,
     );
   }
 
