@@ -18,9 +18,8 @@ class _BodyState extends State<Body> {
   bool isL = true;
   dynamic data;
   void getJsonData() async {
-    var response = await http.get(
-      Uri.parse('https://api.github.com/users/repository/followers'),
-    );
+    var response = await http
+        .get(Uri.parse('https://api.github.com/users/repository/followers'));
     setState(() {
       isL = false;
       data = json.decode(response.body);
