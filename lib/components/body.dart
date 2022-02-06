@@ -32,7 +32,6 @@ class _BodyState extends State<Body> {
     getJsonData();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -44,7 +43,7 @@ class _BodyState extends State<Body> {
           child: Container(
             width: size.width,
             height: size.height * .25,
-            color: const Color.fromARGB(255, 100, 93, 197),
+            color: backgroundColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -68,12 +67,9 @@ class _BodyState extends State<Body> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 45),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'Stories',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: textCategory(context, text: 'Stories', color: black),
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
@@ -97,11 +93,9 @@ class _BodyState extends State<Body> {
                         ),
                 ),
                 const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Text('Chats',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: textCategory(context, text: 'Chats', color: black),
                 ),
                 Expanded(
                   child: isL
@@ -137,8 +131,7 @@ class _BodyState extends State<Body> {
                                               height: 12,
                                               width: 12,
                                               decoration: const BoxDecoration(
-                                                color: Color.fromARGB(
-                                                    255, 31, 212, 107),
+                                                color: activeColor,
                                                 shape: BoxShape.circle,
                                               ),
                                             ),
@@ -182,11 +175,25 @@ class _BodyState extends State<Body> {
     );
   }
 
+  Text textCategory(
+    BuildContext context, {
+    required String text,
+    required Color color,
+  }) {
+    return Text(
+      text,
+      style: Theme.of(context)
+          .textTheme
+          .headline6!
+          .copyWith(fontSize: 20, fontWeight: FontWeight.bold, color: color),
+    );
+  }
+
   Row _searchAndMoreIcons() {
     return Row(children: const [
-      Icon(Icons.search, color: Colors.white),
+      Icon(Icons.search, color: white),
       SizedBox(width: 7),
-      Icon(Icons.more_vert, color: Colors.white)
+      Icon(Icons.more_vert, color: white)
     ]);
   }
 
@@ -205,21 +212,17 @@ class _BodyState extends State<Body> {
           ),
         ),
         const SizedBox(width: 5),
-        const Text(
-          'Celine',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
+        textCategory(context, text: 'Celine', color: white)
       ],
     );
   }
 
   BoxDecoration _decoration() => const BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(60),
           topRight: Radius.circular(60),
         ),
+        color: white,
       );
 
   ListView componentsDialoq() {
@@ -229,13 +232,13 @@ class _BodyState extends State<Body> {
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, i) => ListTile(
-          iconColor: Colors.white,
-          textColor: Colors.white,
+          iconColor: white,
+          textColor: white,
           enabled: true,
           leading: Icon(icons[i]),
           title: Text(title[i], softWrap: true)),
       separatorBuilder: (context, i) => const Divider(
-        color: Color.fromARGB(255, 207, 207, 207),
+        color: dividerColor,
         height: 2,
         thickness: 1.5,
         indent: 1,
