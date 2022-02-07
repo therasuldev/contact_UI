@@ -1,8 +1,8 @@
 import '../constant/const_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
+// ignore: must_be_immutable
 class BodyCallHistory extends StatefulWidget {
   bool isV = true;
   BodyCallHistory({Key? key, required this.isV}) : super(key: key);
@@ -12,14 +12,6 @@ class BodyCallHistory extends StatefulWidget {
 }
 
 class _BodyCallHistoryState extends State<BodyCallHistory> {
-  List<String> items = <String>['1', '2', '3', '4', '5'];
-
-  void _reverse() {
-    setState(() {
-      items = items.reversed.toList();
-    });
-  }
-
   http.Response? response;
 
   @override

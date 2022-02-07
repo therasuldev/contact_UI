@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// ignore: must_be_immutable
 class BodyChats extends StatefulWidget {
   bool isV = true;
   BodyChats({Key? key, required this.isV}) : super(key: key);
