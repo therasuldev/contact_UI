@@ -1,8 +1,8 @@
+import 'package:contact_ui/components/body_call_history.dart';
 
-import '../components/body.dart';
+import '../components/body_chats.dart';
 import '../constant/const_list.dart';
 import 'package:flutter/material.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,13 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var _currentIndex = 0;
-  bool _flag = true;
-
+  bool flag = true;
   Animation<double>? _myAnimation;
   AnimationController? _controller;
-
- 
-
+  PageController? controller;
   @override
   void initState() {
     super.initState();
@@ -27,25 +24,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 350),
     );
+    controller = PageController(initialPage: 0);
 
     _myAnimation = CurvedAnimation(curve: Curves.linear, parent: _controller!);
   }
 
+  @override
+  void dispose() {
+    controller!.dispose();
+    super.dispose();
+  }
+
   void _onTap() {
-    if (_flag) {
+    if (flag) {
       _controller!.forward();
     } else {
       _controller!.reverse();
     }
-    _flag = !_flag;
+    flag = !flag;
     setState(() {});
   }
 
+  void _changeIndex(int value) => setState(() => _currentIndex = value);
+
   @override
   Widget build(BuildContext context) {
-   
+    List list = [BodyChats(isV: flag), BodyCallHistory(isV: flag)];
     return Scaffold(
-      body:  Body(isV: _flag),
+      body: PageView(
+          controller: controller,
+          onPageChanged: _changeIndex,
+          children: [list[_currentIndex]]),
       floatingActionButton: FloatingActionButton(
         child: AnimatedIcon(
             icon: AnimatedIcons.menu_close, progress: _myAnimation!),
@@ -66,11 +75,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         BottomNavigationBarItem(icon: Icon(Icons.call), label: '')
       ],
       onTap: _changeIndex,
-      backgroundColor:white,
+      backgroundColor: white,
     );
   }
-
-
-
-  void _changeIndex(int value) => setState(() => _currentIndex = value);
 }

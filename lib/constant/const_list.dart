@@ -13,5 +13,6 @@ List icons = [
 const backgroundColor = Color.fromARGB(255, 100, 93, 197);
 const activeColor = Color.fromARGB(255, 31, 212, 107);
 const white = Colors.white;
+const red = Colors.red;
 const black = Colors.black;
 const dividerColor = Color.fromARGB(255, 207, 207, 207);

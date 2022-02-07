@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Body extends StatefulWidget {
+class BodyChats extends StatefulWidget {
   bool isV = true;
-  Body({Key? key, required this.isV}) : super(key: key);
+  BodyChats({Key? key, required this.isV}) : super(key: key);
 
   @override
-  _BodyState createState() => _BodyState();
+  _BodyChatsState createState() => _BodyChatsState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyChatsState extends State<BodyChats> {
   http.Response? response;
 
   bool isL = true;
