@@ -1,11 +1,11 @@
-import '../constant/const_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../constant/const_list.dart';
+
 // ignore: must_be_immutable
 class BodyCallHistory extends StatefulWidget {
-  bool isV = true;
-  BodyCallHistory({Key? key, required this.isV}) : super(key: key);
+  const BodyCallHistory({Key? key}) : super(key: key);
 
   @override
   _BodyCallHistoryState createState() => _BodyCallHistoryState();
@@ -96,28 +96,26 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 40,
-          child: widget.isV
-              ? const SizedBox.shrink()
-              : Container(
-                  height: size.height * .4,
-                  width: size.width * .6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [.5, 1.0],
-                      colors: [
-                        Color.fromARGB(255, 199, 185, 236),
-                        Color.fromARGB(255, 161, 140, 218),
-                      ],
-                    ),
-                  ),
-                  child: componentsDialoq(),
-                ),
-        )
+        // Positioned(
+        //   bottom: 40,
+        //   child: Container(
+        //     height: size.height * .4,
+        //     width: size.width * .6,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(20),
+        //       gradient: const LinearGradient(
+        //         begin: Alignment.topCenter,
+        //         end: Alignment.bottomCenter,
+        //         stops: [.5, 1.0],
+        //         colors: [
+        //           Color.fromARGB(255, 199, 185, 236),
+        //           Color.fromARGB(255, 161, 140, 218),
+        //         ],
+        //       ),
+        //     ),
+        //    // child: componentsDialoq(),
+        //   ),
+        // )
       ],
     );
   }
@@ -152,26 +150,26 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
         color: white,
       );
 
-  ListView componentsDialoq() {
-    return ListView.separated(
-      padding: const EdgeInsets.all(0),
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, i) => ListTile(
-          iconColor: white,
-          textColor: white,
-          enabled: true,
-          leading: Icon(icons[i]),
-          title: Text(title[i], softWrap: true)),
-      separatorBuilder: (context, i) => const Divider(
-        color: dividerColor,
-        height: 2,
-        thickness: 1.5,
-        indent: 1,
-        endIndent: 1,
-      ),
-      itemCount: icons.length,
-    );
-  }
+  // ListView componentsDialoq() {
+  //   return ListView.separated(
+  //     padding: const EdgeInsets.all(0),
+  //     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+  //     shrinkWrap: true,
+  //     physics: const BouncingScrollPhysics(),
+  //     itemBuilder: (context, i) => ListTile(
+  //         iconColor: white,
+  //         textColor: white,
+  //         enabled: true,
+  //         leading: Icon(icons[i]),
+  //         title: Text(title[i], softWrap: true)),
+  //     separatorBuilder: (context, i) => const Divider(
+  //       color: dividerColor,
+  //       height: 2,
+  //       thickness: 1.5,
+  //       indent: 1,
+  //       endIndent: 1,
+  //     ),
+  //     itemCount: icons.length,
+  //   );
+  // }
 }

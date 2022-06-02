@@ -1,4 +1,6 @@
+import 'package:contact_ui/view/utils/utils.dart';
 import 'package:flutter/material.dart';
+
 Widget stories({
   required int index,
   required String username,
@@ -8,26 +10,14 @@ Widget stories({
       children: [
         Container(
           width: 80,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: Colors.orange,
-              width: 3,
-            ),
-            borderRadius: BorderRadius.circular(100),
-          ),
+          decoration: ViewUtils.bigStori(),
           child: Container(
             width: 60,
             height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(image),
-              ),
-            ),
+            decoration: ViewUtils.littleStori(image),
             margin: const EdgeInsets.all(5),
           ),
+          margin: const EdgeInsets.symmetric(horizontal: 3),
         ),
         const SizedBox(height: 5),
         Text(username),

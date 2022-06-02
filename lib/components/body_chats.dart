@@ -1,234 +1,169 @@
-import 'stories.dart';
-import '../constant/const_list.dart';
+import 'package:contact_ui/components/stories.dart';
+import 'package:contact_ui/core/bloc/app_cubit.dart';
+import 'package:contact_ui/core/bloc/app_state.dart';
+import 'package:contact_ui/view/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-// ignore: must_be_immutable
+import '../constant/const_list.dart';
+
 class BodyChats extends StatefulWidget {
-  bool isV = true;
-  BodyChats({Key? key, required this.isV}) : super(key: key);
+  const BodyChats({Key? key}) : super(key: key);
 
   @override
   _BodyChatsState createState() => _BodyChatsState();
 }
 
 class _BodyChatsState extends State<BodyChats> {
-  http.Response? response;
-
-  bool isL = true;
-  dynamic data;
-  void getJsonData() async {
-    var response = await http
-        .get(Uri.parse('https://api.github.com/users/repository/followers'));
-    setState(() {
-      isL = false;
-      data = json.decode(response.body);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    getJsonData();
+    context.read<AppCubit>().getJsonData();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Positioned(
-          top: 0,
+    final padding = MediaQuery.of(context).padding;
+    const storiesStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          backgroundColor: backgroundColor,
+          flexibleSpace: Padding(
+            padding: EdgeInsets.only(top: padding.top / 2, left: 7),
+            child: _avatarAndDisplayName(),
+          ),
+          actions: const [
+            Icon(Icons.search, color: white),
+            Icon(Icons.more_vert, color: white)
+          ],
+          toolbarHeight: 80,
+          elevation: 0,
+        ),
+        body: Align(
+          alignment: Alignment.bottomCenter,
           child: Container(
             width: size.width,
-            height: size.height * .25,
-            color: backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _avatarAndDisplayName(),
-                  _searchAndMoreIcons(),
-                ],
-              ),
-            ),
+            height: size.height * .8,
+            decoration: ViewUtils.bodyDecoration(),
+            child: BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+              if (state is AppLoading) {
+                return const SpinKitSpinningLines(color: black);
+              }
+
+              if (state is AppSuccess) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 15, top: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Stories', style: storiesStyle),
+                      bodyStories(state),
+                      const Text('Chats', style: storiesStyle),
+                      bodyChats(state),
+                    ],
+                  ),
+                );
+              }
+              if (state is AppFailed) {
+                return Center(child: Text(state.error));
+              } else {
+                return const Center(child: Text('Not Data'));
+              }
+            }),
           ),
         ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-            width: size.width,
-            height: size.height * .75,
-            decoration: _decoration(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+    );
+  }
+
+  Expanded bodyChats(AppSuccess state) {
+    return Expanded(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: state.data.length,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, i) {
+          return ListTile(
+            contentPadding: const EdgeInsets.only(right: 10),
+            title: Text(state.data[i]['login']),
+            subtitle: Text('Hi  ${state.data[i]['login']}'),
+            leading: onlineStatus(state, i),
+            trailing: const Text('just now'),
+          );
+        },
+      ),
+    );
+  }
+
+  Container onlineStatus(AppSuccess state, int i) {
+    return Container(
+      height: 45,
+      width: 45,
+      decoration: ViewUtils.profileDecoration(state.data[i]['avatar_url']),
+      child: i % 2 == 0
+          ? Stack(
+              clipBehavior: Clip.none,
               children: [
-                const SizedBox(height: 45),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: textCategory(context, text: 'Stories', color: black),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 100,
-                  child: isL
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          itemCount: data.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) => Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: stories(
-                                index: index,
-                                username: data[index]['login'],
-                                image: data[index]['avatar_url']),
-                          ),
-                          scrollDirection: Axis.horizontal,
-                        ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: textCategory(context, text: 'Chats', color: black),
-                ),
-                Expanded(
-                  child: isL
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: data.length,
-                          scrollDirection: Axis.vertical,
-                          padding: const EdgeInsets.all(0),
-                          itemBuilder: (context, i) {
-                            return ListTile(
-                              title: Text(data[i]['login']),
-                              subtitle: Text('Hi  ${data[i]['login']}'),
-                              leading: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(data[i]['avatar_url']),
-                                  ),
-                                ),
-                                child: i % 2 == 0
-                                    ? Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: Container(
-                                              height: 12,
-                                              width: 12,
-                                              decoration: const BoxDecoration(
-                                                color: activeColor,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    : null,
-                              ),
-                              trailing: const Text('just now'),
-                            );
-                          },
-                        ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    height: 12,
+                    width: 12,
+                    decoration: ViewUtils.onlineStatus(),
+                  ),
                 )
               ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 40,
-          child: widget.isV
-              ? const SizedBox.shrink()
-              : Container(
-                  height: size.height * .4,
-                  width: size.width * .6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [.5, 1.0],
-                      colors: [
-                        Color.fromARGB(255, 199, 185, 236),
-                        Color.fromARGB(255, 161, 140, 218),
-                      ],
-                    ),
-                  ),
-                  child: componentsDialoq(),
-                ),
-        )
-      ],
+            )
+          : null,
     );
   }
 
-  Text textCategory(
-    BuildContext context, {
-    required String text,
-    required Color color,
-  }) {
-    return Text(
-      text,
-      style: Theme.of(context)
-          .textTheme
-          .headline6!
-          .copyWith(fontSize: 20, fontWeight: FontWeight.bold, color: color),
+  SizedBox bodyStories(AppSuccess state) {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: state.data.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return stories(
+            index: index,
+            username: state.data[index]['login'],
+            image: state.data[index]['avatar_url'],
+          );
+        },
+        scrollDirection: Axis.horizontal,
+      ),
     );
   }
 
-  Row _searchAndMoreIcons() {
-    return Row(children: const [
-      Icon(Icons.search, color: white),
-      SizedBox(width: 7),
-      Icon(Icons.more_vert, color: white)
-    ]);
-  }
-
-  Row _avatarAndDisplayName() {
+  Widget _avatarAndDisplayName() {
     return Row(
       children: [
         Container(
           height: 50,
           width: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/img/musk.jpg'),
-            ),
-          ),
+          decoration: ViewUtils.displayDecoration(),
         ),
         const SizedBox(width: 5),
-        textCategory(context, text: 'Celine', color: white)
+        Text(
+          'Celine',
+          style: Theme.of(context).textTheme.headline6!.copyWith(
+              fontSize: 20, fontWeight: FontWeight.bold, color: white),
+        ),
       ],
     );
   }
 
-  BoxDecoration _decoration() => const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(60),
-          topRight: Radius.circular(60),
-        ),
-        color: white,
-      );
-
   ListView componentsDialoq() {
     return ListView.separated(
-      padding: const EdgeInsets.all(0),
+      padding: EdgeInsets.zero,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
