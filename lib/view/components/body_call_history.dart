@@ -42,7 +42,7 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
                 children: [
                   const Text(
                     'Today',
-                    style: TextStyle(fontSize: 20, color: black),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   bodyCallHistory()
                 ],
