@@ -1,22 +1,29 @@
-abstract class AppState {}
+import 'package:equatable/equatable.dart';
 
-class AppInitial extends AppState {}
+abstract class AppState extends Equatable {}
 
-class AppLoading extends AppState{}
+class AppInitial extends AppState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AppLoading extends AppState {
+  @override
+  List<Object?> get props => [];
+}
 
 class AppFailed extends AppState {
   final String error;
-
   AppFailed({required this.error});
+  
   @override
   List<Object?> get props => [error];
 }
 
 class AppSuccess extends AppState {
-  @override
-  List data;
-
+  final List data;
   AppSuccess({required this.data});
+
   @override
   List<Object?> get props => [data];
 }
