@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/const_list.dart';
+import '../constant/const_list.dart';
 
 class ViewUtils {
   static profileDecoration(String image) {
@@ -41,12 +41,12 @@ class ViewUtils {
     );
   }
 
-  static displayDecoration() {
+  static displayAvatarDecoration({String? image}) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(100),
-      image: const DecorationImage(
+      image: DecorationImage(
         fit: BoxFit.cover,
-        image: AssetImage('assets/img/musk.jpg'),
+        image: AssetImage(image ?? 'assets/img/musk.jpg'),
       ),
     );
   }

@@ -1,6 +1,6 @@
-import 'package:contact_ui/components/body_call_history.dart';
 import 'package:flutter/material.dart';
 
+import '../components/body_call_history.dart';
 import '../components/body_chats.dart';
 import '../constant/const_list.dart';
 

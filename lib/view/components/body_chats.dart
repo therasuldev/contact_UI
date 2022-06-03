@@ -1,6 +1,6 @@
-import 'package:contact_ui/components/stories.dart';
 import 'package:contact_ui/core/bloc/app_cubit.dart';
 import 'package:contact_ui/core/bloc/app_state.dart';
+import 'package:contact_ui/view/components/stories.dart';
 import 'package:contact_ui/view/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,22 +27,11 @@ class _BodyChatsState extends State<BodyChats> {
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     const storiesStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: backgroundColor,
-        appBar: AppBar(
-          backgroundColor: backgroundColor,
-          flexibleSpace: Padding(
-            padding: EdgeInsets.only(top: padding.top / 2, left: 7),
-            child: _avatarAndDisplayName(),
-          ),
-          actions: const [
-            Icon(Icons.search, color: white),
-            Icon(Icons.more_vert, color: white)
-          ],
-          toolbarHeight: 80,
-          elevation: 0,
-        ),
+        appBar: appBar(padding),
         body: Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -80,7 +69,23 @@ class _BodyChatsState extends State<BodyChats> {
     );
   }
 
-  Expanded bodyChats(AppSuccess state) {
+  AppBar appBar(EdgeInsets padding) {
+    return AppBar(
+      backgroundColor: backgroundColor,
+      flexibleSpace: Padding(
+        padding: EdgeInsets.only(top: padding.top / 2, left: 7),
+        child: _avatarAndDisplayName(),
+      ),
+      actions: const [
+        Icon(Icons.search, color: white),
+        Icon(Icons.more_vert, color: white)
+      ],
+      toolbarHeight: 80,
+      elevation: 0,
+    );
+  }
+
+  Widget bodyChats(AppSuccess state) {
     return Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
@@ -100,7 +105,7 @@ class _BodyChatsState extends State<BodyChats> {
     );
   }
 
-  Container onlineStatus(AppSuccess state, int i) {
+  Widget onlineStatus(AppSuccess state, int i) {
     return Container(
       height: 45,
       width: 45,
@@ -124,7 +129,7 @@ class _BodyChatsState extends State<BodyChats> {
     );
   }
 
-  SizedBox bodyStories(AppSuccess state) {
+  Widget bodyStories(AppSuccess state) {
     return SizedBox(
       height: 120,
       child: ListView.builder(
@@ -144,43 +149,18 @@ class _BodyChatsState extends State<BodyChats> {
   }
 
   Widget _avatarAndDisplayName() {
+    const contactNameStyle =
+        TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: white);
     return Row(
       children: [
         Container(
           height: 50,
           width: 50,
-          decoration: ViewUtils.displayDecoration(),
+          decoration: ViewUtils.displayAvatarDecoration(),
         ),
         const SizedBox(width: 5),
-        Text(
-          'Celine',
-          style: Theme.of(context).textTheme.headline6!.copyWith(
-              fontSize: 20, fontWeight: FontWeight.bold, color: white),
-        ),
+        const Text('Celine', style: contactNameStyle),
       ],
-    );
-  }
-
-  ListView componentsDialoq() {
-    return ListView.separated(
-      padding: EdgeInsets.zero,
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, i) => ListTile(
-          iconColor: white,
-          textColor: white,
-          enabled: true,
-          leading: Icon(icons[i]),
-          title: Text(title[i], softWrap: true)),
-      separatorBuilder: (context, i) => const Divider(
-        color: dividerColor,
-        height: 2,
-        thickness: 1.5,
-        indent: 1,
-        endIndent: 1,
-      ),
-      itemCount: icons.length,
     );
   }
 }

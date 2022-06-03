@@ -1,8 +1,8 @@
 import 'package:contact_ui/core/bloc/app_cubit.dart';
 import 'package:contact_ui/core/repo/repo.dart';
+import 'package:contact_ui/view/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'page/home_page.dart';
 
 void main() {
   runApp(const MyApp());
