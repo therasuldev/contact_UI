@@ -1,29 +1,45 @@
-import 'package:equatable/equatable.dart';
+import '../model/user_model.dart';
 
-abstract class AppState extends Equatable {}
+class AppState {
+  final bool isInProgress;
+  final bool isFailure;
+  final bool isSuccess;
+  final List<User>? data;
 
-class AppInitial extends AppState {
-  @override
-  List<Object?> get props => [];
-}
+  const AppState({
+    required this.isInProgress,
+    required this.isFailure,
+    required this.isSuccess,
+    this.data,
+  });
 
-class AppLoading extends AppState {
-  @override
-  List<Object?> get props => [];
-}
+  AppState.loading()
+      : this(
+          isFailure: false,
+          isInProgress: true,
+          isSuccess: false,
+          data: null,
+        );
+  AppState.success({List<User>? data})
+      : this(
+          isFailure: false,
+          isInProgress: false,
+          isSuccess: true,
+          data: data,
+        );
+  AppState.failed()
+      : this(
+          isFailure: true,
+          isInProgress: false,
+          isSuccess: false,
+          data: null,
+        );
 
-class AppFailed extends AppState {
-  final String error;
-  AppFailed({required this.error});
-  
-  @override
-  List<Object?> get props => [error];
-}
-
-class AppSuccess extends AppState {
-  final List data;
-  AppSuccess({required this.data});
-
-  @override
-  List<Object?> get props => [data];
+  AppState.unknown()
+      : this(
+          isFailure: false,
+          isInProgress: true,
+          isSuccess: false,
+          data: null,
+        );
 }

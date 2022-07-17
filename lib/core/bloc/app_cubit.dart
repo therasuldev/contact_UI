@@ -1,21 +1,21 @@
+import 'dart:developer';
+
 import 'package:contact_ui/core/repo/repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
-  AppCubit() : super(AppInitial());
+  AppCubit() : super(AppState.unknown());
 
   ContactRepo repo = ContactRepo();
-  Future getJsonData() async {
+  void getALlUsers() async {
     try {
-      emit(AppLoading());
-      var data = await repo.getContacts();
-      if (data != null) {
-        emit(AppSuccess(data: data));
-      }
+      emit(AppState.loading());
+      final user = await repo.getContacts();
+      emit(AppState.success(data: user));
     } catch (e) {
-      emit(AppFailed(error: e.toString()));
+      emit(AppState.failed());
     }
   }
 }

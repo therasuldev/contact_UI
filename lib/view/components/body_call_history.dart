@@ -16,12 +16,6 @@ class BodyCallHistory extends StatefulWidget {
 
 class _BodyCallHistoryState extends State<BodyCallHistory> {
   @override
-  void initState() {
-    super.initState();
-    context.read<AppCubit>().getJsonData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
@@ -57,10 +51,10 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
   Widget bodyCallHistory() {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
-        if (state is AppLoading) {
-          return const SpinKitSpinningLines(color: black);
+        if (state.isInProgress) {
+          return const SpinKitDualRing(color: red);
         }
-        if (state is AppSuccess) {
+        if (state.isSuccess) {
           return Expanded(
             child: ListView.custom(
               physics: const BouncingScrollPhysics(),
@@ -73,14 +67,15 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         )
                       : ListTile(
-                          title: Text(state.data[index]['login'], style: style),
+                          title:
+                              Text(state.data![index].userName, style: style),
                           subtitle: const Text('07:14PM'),
                           contentPadding: const EdgeInsets.only(right: 10),
                           leading: Container(
                             height: 40,
                             width: 40,
                             decoration: ViewUtils.profileDecoration(
-                                state.data[index]['avatar_url']),
+                                state.data![index].userImage),
                           ),
                           trailing: index % 2 == 0
                               ? const Icon(Icons.video_call, color: activeColor)
@@ -93,11 +88,7 @@ class _BodyCallHistoryState extends State<BodyCallHistory> {
             ),
           );
         }
-        if (state is AppFailed) {
-          return Center(child: Text(state.error));
-        } else {
-          return const Center(child: Text('Not Data'));
-        }
+        return const SizedBox.shrink();
       },
     );
   }
